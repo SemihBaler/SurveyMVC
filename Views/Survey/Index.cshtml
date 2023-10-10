@@ -1,13 +1,16 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
 <style>
     /* Tablo hücrelerini sınırla ve taşan içeriği görüntüle */
     .table td {
-        max-width: 300px; /* Maksimum genişlik ayarı */
+        max-width: 600px; /* Maksimum genişlik ayarı */
         overflow: auto; /* Taşan içeriği görüntüle */
+        text-align: center; /* Metni yatayda ortala */
+        vertical-align: middle; /* Metni dikeyde ortala */
     }
+
 </style>
 
 <div class="row">
@@ -23,53 +26,48 @@
                     <tr>
                         <th>#</th>
                         <th>Soru</th>
-                        <th>Puan</th>
-                        <th>Oda Numarası</th>
-                        <th>Mail Adresi</th>
-                        <th>Cevaplama Tarihi</th>
+                        <th>Oluşturma Tarihi</th>
+                        <th>Değiştirme Tarihi</th>
+                        <th>Silme Tarihi</th>
+                        <th>Update</th>
+                        <th>Delete</th>
                     </tr>
                 </thead>
                 <tbody class="table-group-divider">
                     <tr>
                         <td>1</td>
-                        <td>
+                        <td style ="text-align:left;">
                             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
                         </td>
-                        <td>Puan</td>
-                        <td>Oda Numarası</td>
-                        <td>Mail Adresi</td>
-                        <td>Cevaplama Tarihi</td>
+                        <td>Oluşturma Tarihi</td>
+                        <td>Değiştirme Tarihi</td>
+                        <td>Silme Tarihi</td>
+                        <th><div class="btn btn-sm btn-outline-primary">Güncelle</div></th>
+                        <th><div class="btn btn-sm btn-outline-danger">Delete</div></th>
                     </tr>
                     <tr>
-                        <td>1</td>
-                        <td>
+                        <td>2</td>
+                        <td style="text-align:left;">
                             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
                         </td>
-                        <td>Puan</td>
-                        <td>Oda Numarası</td>
-                        <td>Mail Adresi</td>
-                        <td>Cevaplama Tarihi</td>
+                        <td>Oluşturma Tarihi</td>
+                        <td>Değiştirme Tarihi</td>
+                        <td>Silme Tarihi</td>
+                        <th><div class="btn btn-sm btn-outline-primary">Güncelle</div></th>
+                        <th><div class="btn btn-sm btn-outline-danger">Delete</div></th>
                     </tr>
                     <tr>
-                        <td>1</td>
-                        <td>
+                        <td>3</td>
+                        <td style="text-align:left;">
                             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
                         </td>
-                        <td>Puan</td>
-                        <td>Oda Numarası</td>
-                        <td>Mail Adresi</td>
-                        <td>Cevaplama Tarihi</td>
+                        <td>Oluşturma Tarihi</td>
+                        <td>Değiştirme Tarihi</td>
+                        <td>Silme Tarihi</td>
+                        <th><div class="btn btn-sm btn-outline-primary">Güncelle</div></th>
+                        <th><div class="btn btn-sm btn-outline-danger">Delete</div></th>
                     </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                        </td>
-                        <td>Puan</td>
-                        <td>Oda Numarası</td>
-                        <td>Mail Adresi</td>
-                        <td>Cevaplama Tarihi</td>
-                    </tr>
+                   
                     <!-- Diğer satırları da benzer şekilde düzenleyin -->
                 </tbody>
             </table>
