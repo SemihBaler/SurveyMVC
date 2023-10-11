@@ -1,0 +1,35 @@
+﻿
+@{
+    ViewData["Title"] = "UpdateQuestion";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model UpdateQuestionDto
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-8">
+            <form asp-action="UpdateQuestion" asp-controller="Question" method="post" enctype="multipart/form-data">
+                <input type="hidden" asp-for="QuestionId"/>
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Soru Güncelle</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-4">
+                            <label class="form-label" asp-for="@Model.Item"></label>
+                            <input asp-for="@Model.Item" class="form-control" />
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label" asp-for="@Model.Status"></label>
+                            <input asp-for="@Model.Status" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-lg btn-outline-success float-start">Güncelle</button>
+                        <a asp-controller="Question" asp-action="Questions" class="btn btn-lg btn-outline-info float-end">Geri Dön</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+

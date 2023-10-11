@@ -1,0 +1,75 @@
+﻿@{
+    ViewData["Title"] = "Question";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int count = 1;
+}
+@model List<QuestionDto>
+<style>
+    /* Tablo hücrelerini sınırla ve taşan içeriği görüntüle */
+    .table td {
+        max-width: 600px; /* Maksimum genişlik ayarı */
+        overflow: auto; /* Taşan içeriği görüntüle */
+        text-align: left; /* Metni yatayda ortala */
+        vertical-align: middle; /* Metni dikeyde ortala */
+    }
+
+    .table {
+        margin: none;
+    }
+</style>
+
+<div class="row">
+    <div class="card col-sm-12">
+
+        <div class="card-body">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Soru</th>
+                        <th>Statüsü</th>
+                        <th>Oluşturma Tarihi</th>
+                        <th>Değiştirme Tarihi</th>
+                        <th>Silme Tarihi</th>
+                        <th>Güncelle</th>
+                        <th>İptal Et</th>
+                        <th>Kaldır</th>
+                    </tr>
+                </thead>
+                <tbody class="table-group-divider">
+                    @foreach(var item in Model)
+                    {
+                        <tr>
+                            <td>@count</td>
+                            <td>@item.Item</td>
+                            <td>@if(@item.Status.ToString()=="1")
+                                {
+                                    <span>Yayinda</span>
+                                }
+                                else if (@item.Status.ToString() == "2")
+                                {
+                                    <span>Yayinda</span>
+                                }
+                                else
+                                {
+                                    <span>Yayinda Değil</span>
+                                }
+                            </td>
+                            <td>@item.CreatedDate</td>
+                            <td>@item.UpdatedDate</td>
+                            <td>@item.DeletedDate</td>
+                            <td><a asp-action="UpdateQuestion" asp-controller="Question" asp-route-id="@item.QuestionId" class="btn btn-md btn-outline-success">Güncelle</a></td>
+                            <td><a asp-action="DeleteQuestion" asp-controller="Question" asp-route-id="@item.QuestionId" class="btn btn-md btn-outline-warning">İptal Et</a></td>
+                            <td><a asp-action="RemoveQuestion" asp-controller="Question" asp-route-id="@item.QuestionId" class="btn btn-md btn-outline-danger">Kaldır</a></td>
+                        </tr>
+                        count++;
+                    }
+                    <!-- Diğer satırları da benzer şekilde düzenleyin -->
+                </tbody>
+            </table>
+        </div>
+        <div class="card-footer">
+            <a href="/Question/AddQuestion" class="btn btn-primary w-100">Yeni Soru Ekle</a>
+        </div>
+    </div>
+</div>

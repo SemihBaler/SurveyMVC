@@ -1,0 +1,29 @@
+﻿
+@{
+    ViewData["Title"] = "AddQuestion";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model AddQuestionDto
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-8">
+            <form asp-action="AddQuestion" asp-controller="Question" method="post">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Soru Ekle</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-4">
+                            <label class="form-label" asp-for="Item">Soru</label>
+                            <textarea asp-for="Item" class="form-control" placeholder="Lütfen Soruyu Giriniz...."></textarea>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-lg btn-outline-success float-start">Ekle</button>
+                        <a asp-controller="Question" asp-action="Questions" class="btn btn-lg btn-outline-info float-end">Geri Dön</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
