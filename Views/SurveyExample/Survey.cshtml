@@ -1,0 +1,134 @@
+﻿@using Newtonsoft.Json;
+@{
+    ViewData["Title"] = "Survey";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model SurveyDto
+<div class="row">
+    <div class="col-10">
+        <form asp-action="Survey" asp-controller="SurveyExample" method="post">
+            <div class="card" style="margin-bottom:150px; width:1000px; position:absolute">
+                <div class="card-header">
+                    <label class="form-label" name="RoomNumber" asp-for="@Model.RoomNumber">Oda Numarası</label>
+                    <input class="form-control" asp-for="@Model.RoomNumber" placeholder="Oda numaranızı giriniz..." />
+                    <br />
+                    <label class="form-label" name="Mail" asp-for="@Model.Mail">Mail Adresi</label>
+                    <input class="form-control" asp-for="@Model.Mail" placeholder="Mail adresinizi giriniz..." />
+                </div>
+                <div id="surveyPartPartialView"></div>
+                <div class="card-footer">
+                    <button class="btn bt-outline-primary" style="background-color:cornflowerblue;color:white" id="submit-button">Anketi Gönder</button>
+                </div>
+            </div>
+        </form>
+        <button class="btn bt-primary" id="loadSurveyPart" style="background-color:maroon;color:white;position:relative;top:200px;">Ankete Başla</button>
+        <button disabled class="btn bt-primary" id="loadSurveyPart2" style="background-color:black;color:white;position:relative;top:200px;">Anketi Tamamladınız</button>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#loadSurveyPart').click(function () {
+            $.ajax({
+                url: '@Url.Action("SurveyPart", "SurveyExample")',
+                type: 'GET',
+                success: function (result) {
+                    $('#surveyPartPartialView').html(result);
+                },
+                error: function () {
+                    alert('Bir hata oluştu.');
+                }
+            });
+        });
+    });
+
+    $(document).ready(function () {
+        var response = [];
+        var responseValue = [];
+        $(document).on("click", ".star-label", function () {
+            var star = $(this).data("star");
+            var questionId = $(this).data("question");
+
+            var starLabels = $(".star-label[data-question=" + questionId + "]");
+            starLabels.each(function () {
+                var thisStar = $(this);
+                var thisStarRating = thisStar.data("rating");
+                if (thisStar.data("star") <= star) {
+                    if (thisStarRating === star) {
+                        thisStar.find("i").removeClass("fa-solid filled-star").addClass("fa-regular");
+                        thisStar.data("rating", 0);
+                    } else {
+                        thisStar.find("i").removeClass("fa-regular").addClass("fa-solid filled-star");
+                        thisStar.data("rating", thisStar.data("star"));
+                    }
+                } else {
+                    thisStar.find("i").removeClass("fa-solid filled-star").addClass("fa-regular");
+                    thisStar.data("rating", 0);
+                }
+            });
+
+            responseValues[questionId] = star;
+            response.push(responseValues);
+            console.log(responseValues);
+        });
+
+        // Diğer işlevler burada devam eder...
+    });
+
+    $(document).ready(function () {
+        $(".card-body, .card-footer, #loadSurveyPart2").hide();
+
+        $("#loadSurveyPart").on("click", function () {
+            $(".card-body, .card-footer, #submit-button").show();
+            $(this).hide();
+        });
+    });
+
+    $(document).ready(function () {
+        $('#submit-button').click(function (e) {
+            e.preventDefault();
+            var itemValues = [];
+          
+
+            $('[id^="Question-"]').each(function (index, element) {
+                var value = element.value;
+                itemValues.push(value);
+            });
+        
+            var surveyDto = {
+                RoomNumber: $('#RoomNumber').val(),
+                Mail: $('#Mail').val(),
+                Item: itemValues,
+                Response: [],
+            };
+            $('.star-checkbox:checked').each(function () {
+                var questionId = $(this).data("question");
+                var answerId = $(this).attr("id");
+                surveyDto.Item.push(questionId);
+                surveyDto.Response.push(answerId);
+            });
+
+            var jsonData = JSON.stringify(surveyDto);
+
+            $.ajax({
+                url: '@Url.Action("Survey", "SurveyExample")',
+                type: 'POST',
+                contentType: 'application/json',
+                data: jsonData,
+                success: function (result) {
+                    alert("Tebrikler! Anketi tamamladınız.");
+                    $(".card-body, .card-footer, #submit-button, #loadSurveyPart").hide();
+                    $("#loadSurveyPart2").show();
+                },
+                error: function () {
+                    alert('Bir hata oluştu.');
+                }
+            });
+        });
+    });
+</script>
+
+
+
+
+

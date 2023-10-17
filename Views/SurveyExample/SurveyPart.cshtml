@@ -1,0 +1,35 @@
+﻿@using Newtonsoft.Json;
+@addTagHelper * ,Microsoft.AspNetCore.Mvc.TagHelpers
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+<div class="card-body">
+    @if (TempData.ContainsKey("resultQuestion") || TempData.ContainsKey("resultAnswer"))
+    {
+        var resultQuestionJson = TempData["resultQuestion"] as string;
+        var resultQuestion = JsonConvert.DeserializeObject<List<QuestionDto>>(resultQuestionJson);
+        var resultAnswerJson = TempData["resultAnswer"] as string;
+        var resultAnswer = JsonConvert.DeserializeObject<List<AnswerDto>>(resultAnswerJson);
+
+        foreach (var item1 in resultQuestion)
+        {
+            <label class="form-label" name="@item1.Item" style="font-weight:bold; font-size:16px;">@item1.Item</label>
+            <input type="hidden"  class="star-checkbox" name="Question-@item1.QuestionId" id="Question-@item1.QuestionId" value="@item1.QuestionId">
+
+            <br />
+
+            foreach (var item2 in resultAnswer)
+            {
+                <label class="star-container">
+                    <input type="hidden" asp-for="@item2.Response" class="star-checkbox" name="Response-@item2.AnswerId" id="Response-@item2.AnswerId">
+                    <label  class="star-label" data-star="@item2.AnswerId" data-rating="0" data-question="@item1.QuestionId">
+                        <i class="star-icon icon-lg fa-regular fa-star fa-lg" style="color:red; height:25px; margin-left:15px;"></i>
+                    </label>
+                </label>
+            }
+            <br />
+        }
+    }
+</div>
+
