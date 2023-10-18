@@ -41,94 +41,80 @@
             });
         });
     });
+   
+    var responseValues = [];
+    
+    $(document).on("click", ".star-label", function () {
+        var star = $(this).data("star");
+        var questionId = $(this).data("question");
+        var starLabels = $(".star-label[data-question=" + questionId + "]");
 
-    $(document).ready(function () {
-        var response = [];
-        var responseValue = [];
-        $(document).on("click", ".star-label", function () {
-            var star = $(this).data("star");
-            var questionId = $(this).data("question");
+        starLabels.each(function () {
+            var thisStar = $(this);
+            var thisStarRating = thisStar.data("rating");
 
-            var starLabels = $(".star-label[data-question=" + questionId + "]");
-            starLabels.each(function () {
-                var thisStar = $(this);
-                var thisStarRating = thisStar.data("rating");
-                if (thisStar.data("star") <= star) {
-                    if (thisStarRating === star) {
-                        thisStar.find("i").removeClass("fa-solid filled-star").addClass("fa-regular");
-                        thisStar.data("rating", 0);
-                    } else {
-                        thisStar.find("i").removeClass("fa-regular").addClass("fa-solid filled-star");
-                        thisStar.data("rating", thisStar.data("star"));
-                    }
-                } else {
-                    thisStar.find("i").removeClass("fa-solid filled-star").addClass("fa-regular");
-                    thisStar.data("rating", 0);
+            if (thisStar.data("star") <= star) {
+                if (thisStarRating === star) {
+                    // Yıldız zaten dolu, içeriği değiştirme
+                    return;
                 }
-            });
-
-            responseValues[questionId] = star;
-            response.push(responseValues);
-            console.log(responseValues);
+                thisStar.find("i").removeClass("fa-regular").addClass("fa-solid filled-star");
+                thisStar.data("rating", thisStar.data("star"));
+            } else {
+                thisStar.find("i").removeClass("fa-solid filled-star").addClass("fa-regular");
+                thisStar.data("rating", 0);
+            }
         });
 
-        // Diğer işlevler burada devam eder...
-    });
-
-    $(document).ready(function () {
-        $(".card-body, .card-footer, #loadSurveyPart2").hide();
-
-        $("#loadSurveyPart").on("click", function () {
-            $(".card-body, .card-footer, #submit-button").show();
-            $(this).hide();
-        });
-    });
-
-    $(document).ready(function () {
-        $('#submit-button').click(function (e) {
-            e.preventDefault();
-            var itemValues = [];
-          
-
-            $('[id^="Question-"]').each(function (index, element) {
-                var value = element.value;
-                itemValues.push(value);
-            });
+        responseValues[questionId] = star;
         
-            var surveyDto = {
-                RoomNumber: $('#RoomNumber').val(),
-                Mail: $('#Mail').val(),
-                Item: itemValues,
-                Response: [],
-            };
-            $('.star-checkbox:checked').each(function () {
-                var questionId = $(this).data("question");
-                var answerId = $(this).attr("id");
-                surveyDto.Item.push(questionId);
-                surveyDto.Response.push(answerId);
-            });
+    });
+    $(".card-body, .card-footer, #loadSurveyPart2").hide();
 
-            var jsonData = JSON.stringify(surveyDto);
+    $("#loadSurveyPart").on("click", function () {
+        $(".card-body, .card-footer, #submit-button").show();
+        $(this).hide();
+    });
+    var date = null;
+    $('#submit-button').click(function (e) {
+        e.preventDefault();
+        var itemValues = [];
+        $('[id^="Question-"]').each(function (index, element) {
+            var value = element.value;
+            itemValues.push(value);
+            
+        });
+        var date = new Date();
+        date.setHours(date.getHours() + 3);
+     
+        var surveyDto = {
+            RoomNumber: $('#RoomNumber').val(),
+            Mail: $('#Mail').val(),
+            Item: itemValues,
+            Response: responseValues,
+            ResponseDate: date,
+        };
+       
+        var jsonData = JSON.stringify(surveyDto);
+        console.log(jsonData);
 
-            $.ajax({
-                url: '@Url.Action("Survey", "SurveyExample")',
-                type: 'POST',
-                contentType: 'application/json',
-                data: jsonData,
-                success: function (result) {
-                    alert("Tebrikler! Anketi tamamladınız.");
-                    $(".card-body, .card-footer, #submit-button, #loadSurveyPart").hide();
-                    $("#loadSurveyPart2").show();
-                },
-                error: function () {
-                    alert('Bir hata oluştu.');
-                }
-            });
+        $.ajax({
+            url: '@Url.Action("Survey", "SurveyExample")',
+            type: 'POST',
+            contentType: 'application/json',
+            data: jsonData,
+            success: function (result) {
+                alert("Tebrikler! Anketi tamamladınız.");
+                $(".card-body, .card-footer, #submit-button, #loadSurveyPart").hide();
+                $("#loadSurveyPart2").show();
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                console.log("Hata oluştu: " + textStatus);
+                console.log("Detay: " + errorThrown);
+                alert('Bir hata oluştu.');
+            }
         });
     });
 </script>
-
-
-
 
 

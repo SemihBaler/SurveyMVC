@@ -1,5 +1,6 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
+    int count = 1;
 }
 
 <style>
@@ -16,6 +17,7 @@
     }
 
 </style>
+@model List<HomeDto>
 
 <div class="row">
     <div class="card col-sm-12">
@@ -33,49 +35,20 @@
                     </tr>
                 </thead>
                 <tbody class="table-group-divider">
-                    <tr>
-                        <td>1</td>
-                        <td>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                        </td>
-                        <td>Oluşturma Tarihi</td>
-                        <td>Değiştirme Tarihi</td>
-                        <td>Silme Tarihi</td>
-                        <th><div class="btn btn-md btn-outline-success">Güncelle</div></th>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                        </td>
-                        <td>Oluşturma Tarihi</td>
-                        <td>Değiştirme Tarihi</td>
-                        <td>Silme Tarihi</td>
-                        <th><div class="btn btn-md btn-outline-success">Güncelle</div></th>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                        </td>
-                        <td>Oluşturma Tarihi</td>
-                        <td>Değiştirme Tarihi</td>
-                        <td>Silme Tarihi</td>
-                        <th><div class="btn btn-md btn-outline-success">Güncelle</div></th>
-                    </tr>
-                    <tr>
-                        <td>4</td>
-                        <td>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                        </td>
-                        <td>Oluşturma Tarihi</td>
-                        <td>Değiştirme Tarihi</td>
-                        <td>Silme Tarihi</td>
-                        <th><div class="btn btn-md btn-outline-success">Güncelle</div></th>
-                    </tr>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
 
+                            <td>@count</td>
+                            <td>@item.QuestionId</td>
+                            <td>@item.AnswerId Puan </td>
+                            <td>@item.RoomNumber</td>
+                            <td>@item.Mail</td>
+                            <td>@item.CreatedDate</td>
 
-                    <!-- Diğer satırları da benzer şekilde düzenleyin -->
+                        </tr>
+                        count++;
+                    }
                 </tbody>
             </table>
         </div>

@@ -3,6 +3,8 @@ using Newtonsoft.Json;
 using SurveyMVC.Dtos.AnswerDtos;
 using SurveyMVC.Dtos.QuestionDtos;
 using SurveyMVC.Dtos.SurveyDtos;
+using System.Drawing;
+using System.Text;
 
 namespace SurveyMVC.Controllers
 {
@@ -42,18 +44,40 @@ namespace SurveyMVC.Controllers
 
 
         [HttpPost]
-        public IActionResult Survey([FromBody] SurveyDto surveyDto)
+        public async Task<IActionResult> Survey([FromBody] SurveyDto surveyDto)
         {
-            foreach (var key in ModelState.Keys)
+            var client = _client.CreateClient();
+            for (int i = 0; i < surveyDto.Item.Count; i++)
             {
-                var modelStateEntry = ModelState[key];
-                if (modelStateEntry.Errors.Any())
+                if (surveyDto.Response.Count!=0)
                 {
-                    foreach (var error in modelStateEntry.Errors)
+                    var result = new ResultDto
                     {
-                        // Hataları loglayın veya konsola yazdırın
-                        Console.WriteLine($"ModelState Error - Field: {key}, Error: {error.ErrorMessage}");
-                    }
+                        Mail = surveyDto.Mail,
+                        ResponseDate = surveyDto.ResponseDate,
+                        RoomNumber = surveyDto.RoomNumber,
+                        Item = surveyDto.Item[i],
+                        Response = surveyDto.Response[i + 1],
+                    };
+
+                    var json = JsonConvert.SerializeObject(result);
+                    var content = new StringContent(json, Encoding.UTF8, "application/json");
+                    var responseMessage = await client.PostAsync("https://localhost:7132/api/Result/AddResult", content);
+                }
+                else
+                {
+                    var result = new ResultDto
+                    {
+                        Mail = surveyDto.Mail,
+                        ResponseDate = surveyDto.ResponseDate,
+                        RoomNumber = surveyDto.RoomNumber,
+                        Item = surveyDto.Item[i],
+                        Response = null,
+                    };
+
+                    var json = JsonConvert.SerializeObject(result);
+                    var content = new StringContent(json, Encoding.UTF8, "application/json");
+                    var responseMessage = await client.PostAsync("https://localhost:7132/api/Result/AddResult", content);
                 }
             }
             return View();
