@@ -4,123 +4,163 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
     <title>Merlot Hotel</title>
-    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
-    <!-- Bootstrap core CSS -->
+
     <link href="/template/Admin-master/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Material Design Bootstrap -->
+
     <link href="/template/Admin-master/css/mdb.min.css" rel="stylesheet">
-    <!-- Your custom styles (optional) -->
+
     <link href="/template/Admin-master/css/style.min.css" rel="stylesheet">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css" />
+
     <style>
+        body {
+            height: 300px;
+        }
+
 
         .page-footer {
             position: fixed;
             width: 100%;
-            background-color: rgba(0,0,0,0.8);
+            height: 70px;
+            bottom: 0; /* Sayfa altında sabit */
+            background-color: rgba(0, 0, 0, 0.8);
+        }
 
+
+        .cardform {
+            position: relative;
+            display: block;
+            z-index: 9999;
+            margin-bottom: 150px;
+        }
+
+        main {
+            min-height: calc(100vh - 80px); /* Footer'ı ve sayfa başlığını dahil et */
+            overflow-y: auto; /* Sayfa yüksekliğini aştığında kaydırma çubuğu göster */
+            padding-bottom: 80px; /* Footer ile içerik arasına boşluk bırak */
         }
 
         img {
             width: 220px;
-            height: auto;
         }
-        .sidebar-fixed {
-    /* Sidebar'ın sabit bir şekilde kalması gerektiğini belirtiyoruz */
-    position: fixed;
-    height: 100%; /* Yükseklik ekran yüksekliği kadar olacak */
-    overflow-y: auto; /* Eğer sidebar ekran yüksekliğinden uzunsa kaydırma çubuğu ekler */
-}
-    </style>
 
+        .sidebar-fixed {
+            position: fixed;
+            height: 100%;
+        }
+
+        @@media (max-width: 800px) {
+            .sidebar-fixed {
+                display: none;
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+        }
+
+        @@media (min-width: 651px) {
+            .sidebar-fixed {
+                display: block;
+            }
+
+            .main-content {
+                margin-left: 300px;
+            }
+        }
+
+        @@media (min-width: 1200px) {
+
+            .main-content {
+                margin-left: 0px;
+            }
+        }
+
+        @@media (max-height: 700px) {
+            .main-content {
+                overflow-y: scroll;
+                max-height: calc(100vh - 80px);
+            }
+    </style>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body class="grey lighten-3">
     <div class="col-2">
-    <header>
-        <!-- Sidebar -->
-        <div class="sidebar-fixed position-fixed">
-            <a href="/Login/Index" class="">
-                <img src="~/template/images/the_merlot_logo.png" class="" alt="" />
-            </a>
-            <div class="list-group list-group-flush">
-                    <a href="/Home/Index" class="list-group-item list-group-item-action waves-effect">
-                    <i class="fa-solid fa-house" style="color: maroon; width:20px; margin-right:10px;"></i>Anket Sonuçları
+        <header>
+            <div class="sidebar-fixed position-fixed">
+                <a href="../Home/Index" class="">
+                    <img src="~/template/images/the_merlot_logo.png" class="" alt="" />
                 </a>
+                <div class="list-group list-group-flush">
+                    <a href="/Home/Index" class="list-group-item list-group-item-action waves-effect">
+                        <i class="fa-solid fa-house" style="color: maroon; width:20px; margin-right:10px;"></i>Anket Sonuçları
+                    </a>
                     <a href="/Question/Questions" class="list-group-item list-group-item-action waves-effect">
                         <i class="fa-solid fa-question" style="color: maroon; width:20px; margin-right:10px;"></i>Sorular
-                </a>
+                    </a>
                     <a href="/Answer/Answers" class="list-group-item list-group-item-action waves-effect">
                         <i class="fa-solid fa-reply" style="color: maroon; width:20px; margin-right:10px;"></i>Cevaplar
                     </a>
-                <a href="/SurveyExample/Survey" class="list-group-item list-group-item-action waves-effect">
+                    <a href="/SurveyExample/Survey" class="list-group-item list-group-item-action waves-effect">
                         <i class="fa-solid fa-circle-info" style="color: maroon; width:20px; margin-right:10px;"></i>  Örnek Anket
-                </a>
+                    </a>
+                    <a class="list-group-item list-group-item-action waves-effect logout-button" id="logout" asp-controller="Login" asp-action="Logout" method="post">
+                        <i class="fa-solid fa-square-arrow-up-right" style="color: maroon; width:20px; margin-right:10px;"></i>  Çıkış Yap
+                    </a>
+                </div>
             </div>
-        </div>
-        <!-- Sidebar -->
-    </header>
+        </header>
     </div>
-    <div class="col-xlg-10 col-lg-12 col-md-12 col-sm-12">
-    <main class="pt-5 mx-lg-5">
-        <div class="container-fluid mt-5">
-            <!--Grid row-->
-
+    <div class="col-xlg-10 col-lg-12 col-md-12 col-sm-12 main-content" >
+        <main class="pt-5 mx-lg-5" style="min-height: calc(100vh - 80px);">
+            <div class="container-fluid mt-2">
                 @RenderBody()
-
-            <!--Grid row-->
-        </div>
-    </main>
+            </div>
+        </main>
     </div>
-    <!--Main layout-->
-    <!--Footer-->
-    <footer class="page-footer text-center" style="background-color: rgba(0,0,0,0.8);">
-        <div class="pt-3">
-            <!-- Social icons -->
-            <div class="pb-2">
-                <a href="" target="_blank">
-                    <i class="fab fa-facebook-f mr-3"></i>
-                </a>
-                <a href="" target="_blank">
-                    <i class="fab fa-twitter mr-3"></i>
-                </a>
-                <a href="" target="_blank">
-                    <i class="fab fa-youtube mr-3"></i>
-                </a>
-                <a href="" target="_blank">
-                    <i class="fab fa-google-plus mr-3"></i>
-                </a>
-                <a href="" target="_blank">
-                    <i class="fab fa-pinterest mr-3"></i>
-                </a>
-            </div>
-            <!-- Social icons -->
-            <!--Copyright-->
-            <div class="footer-copyright px-3">
-                © 2023 Copyright:
-                <a href="#" target="_blank"> Merlot Hotel </a>
-            </div>
-        </div>
-        <!--/.Copyright-->
-    </footer>
-    <!--/.Footer-->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     @RenderSection("scripts", required: false)
 </body>
+<footer class="page-footer text-center" style="background-color: rgba(0, 0, 0, 0.8);">
+    <div class="pt-3">
+        <div class="pb-2">
+            <a href="" target="_blank">
+                <i class="fab fa-facebook-f mr-3"></i>
+            </a>
+            <a href="" target="_blank">
+                <i class="fab fa-twitter mr-3"></i>
+            </a>
+            <a href="" target="_blank">
+                <i class="fab fa-youtube mr-3"></i>
+            </a>
+            <a href="" target="_blank">
+                <i class="fab fa-google-plus mr-3"></i>
+            </a>
+            <a href="" target="_blank">
+                <i class="fab fa-pinterest mr-3"></i>
+            </a>
+        </div>
+        <div class="footer-copyright px-3">
+            © 2023 Copyright:
+            <a href="" target="_blank"> Semih Baler </a>
+        </div>
+    </div>
+</footer>
 </html>
-<!-- SCRIPTS -->
-<!-- JQuery -->
 <script type="text/javascript" src="/template/Admin-master/js/jquery-3.4.1.min.js"></script>
-<!-- Bootstrap tooltips -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script type="text/javascript" src="/template/Admin-master/js/popper.min.js"></script>
-<!-- Bootstrap core JavaScript -->
 <script type="text/javascript" src="/template/Admin-master/js/bootstrap.min.js"></script>
-<!-- MDB core JavaScript -->
 <script type="text/javascript" src="/template/Admin-master/js/mdb.min.js"></script>
-<!-- Initializations -->
 <script type="text/javascript"></script>
+<script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+<script>   
+    $(document).ready(function () {
+        $("#myTable").DataTable();
+ 
+    });
+</script>

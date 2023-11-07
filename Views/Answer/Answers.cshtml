@@ -39,40 +39,40 @@
                     </tr>
                 </thead>
                 <tbody class="table-group-divider">
-                    @foreach (var item in Model)
-                    {
-                        <tr>
-                            <td>@count</td>
-                            <td>@item.Response</td>
-                            <td>
-                                @if (@item.Status.ToString() == "1")
-                                {
-                                    <span>Yayinda</span>
-                                }
-                                else if (@item.Status.ToString() == "2")
-                                {
-                                    <span>Yayinda</span>
-                                }
-                                else
-                                {
-                                    <span>Yayinda Değil</span>
-                                }
-                            </td>
-                            <td>@item.CreatedDate</td>
-                            <td>@item.UpdatedDate</td>
-                            <td>@item.DeletedDate</td>
-                            <td><a asp-action="UpdateAnswer" asp-controller="Answer" asp-route-id="@item.AnswerId" class="btn btn-md btn-outline-success">Güncelle</a></td>
-                            <td><a asp-action="DeleteAnswer" asp-controller="Answer" asp-route-id="@item.AnswerId" class="btn btn-md btn-outline-warning">İptal Et</a></td>
-                            <td><a asp-action="RemoveAnswer" asp-controller="Answer" asp-route-id="@item.AnswerId" class="btn btn-md btn-outline-danger">Kaldır</a></td>
-                        </tr>
-                        count++;
-                    }
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@count</td>
+                                <td>@item.Response</td>
+                                <td>
+                                    @if (@item.Status.ToString() == "1")
+                                    {
+                                        <span>Yayinda</span>
+                                    }
+                                    else if (@item.Status.ToString() == "2")
+                                    {
+                                        <span>Yayinda</span>
+                                    }
+                                    else
+                                    {
+                                        <span>Yayinda Değil</span>
+                                    }
+                                </td>
+                                <td>@item.CreatedDate</td>
+                                <td>@item.UpdatedDate</td>
+                                <td>@item.DeletedDate</td>
+                                <td><a asp-action="UpdateAnswer" asp-controller="Answer" asp-route-id="@item.AnswerId" class="btn btn-md btn-outline-success">Güncelle</a></td>
+                                <td><a asp-action="DeleteAnswer" asp-controller="Answer" asp-route-id="@item.AnswerId" class="btn btn-md btn-outline-warning">İptal Et</a></td>
+                                <td><a asp-action="RemoveAnswer" asp-controller="Answer" asp-route-id="@item.AnswerId" class="btn btn-md btn-outline-danger">Kaldır</a></td>
+                            </tr>
+                            count++;
+                        }                    
                     <!-- Diğer satırları da benzer şekilde düzenleyin -->
                 </tbody>
             </table>
         </div>
         <div class="card-footer">
-            <a href="/Answer/AddAnswer" class="btn btn-primary w-100">Yeni Cevap Ekle</a>
+            <a href="/Answer/AddAnswer" class="btn w-100" style="background-color:rgb(135,21,43); color:white;">Yeni Cevap Ekle</a>
         </div>
     </div>
 </div>

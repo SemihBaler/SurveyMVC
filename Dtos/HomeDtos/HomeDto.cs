@@ -7,5 +7,7 @@
         public string RoomNumber { get; set; }
         public string Mail { get; set; }
         public DateTime CreatedDate { get; set; }
+        public string QuestionItem { get; set; }
+        public string AnswerItem { get; set; }
     }
 }

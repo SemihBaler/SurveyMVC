@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using SurveyMVC.Dtos;
@@ -9,6 +10,7 @@ using System.Text.Unicode;
 
 namespace SurveyMVC.Controllers
 {
+   [Authorize]
     public class QuestionController : Controller
     {
         private readonly IHttpClientFactory _client;
@@ -28,7 +30,7 @@ namespace SurveyMVC.Controllers
                 var result = JsonConvert.DeserializeObject<List<QuestionDto>>(json);
                 return View(result);
             }
-            return View();
+            return RedirectToAction("Error403","Error");
         }
         [HttpGet]
         public IActionResult AddQuestion()
@@ -61,7 +63,7 @@ namespace SurveyMVC.Controllers
                 return View(value);
                 
             }
-            return View();
+            return RedirectToAction("Error403", "Error");
         }
         [HttpPost]
         public async  Task<IActionResult> UpdateQuestion(UpdateQuestionDto question)
@@ -91,16 +93,12 @@ namespace SurveyMVC.Controllers
         public async Task<IActionResult> RemoveQuestion(int id)
         {
             var client = _client.CreateClient();
-            var responseMessage = await client.DeleteAsync($"https://localhost:7132/api/Question/RemoveQuestion?id={id}");
+            var responseMessage = await client.GetAsync($"https://localhost:7132/api/Question/RemoveQuestion?id={id}");
             if (responseMessage.IsSuccessStatusCode)
             {
                 return RedirectToAction("Questions");
             }
-            return View(responseMessage);
+            return RedirectToAction("Questions", "Question");
         }
-
-
-
     }
-
 }

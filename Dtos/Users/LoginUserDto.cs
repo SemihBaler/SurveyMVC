@@ -1,4 +1,4 @@
-﻿namespace SurveyMVC.Dtos
+﻿namespace SurveyMVC.Dtos.Users
 {
     public class LoginUserDto
     {

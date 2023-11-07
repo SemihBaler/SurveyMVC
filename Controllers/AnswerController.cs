@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using SurveyMVC.Dtos.AnswerDtos;
 using SurveyMVC.Dtos.QuestionDtos;
@@ -6,6 +7,7 @@ using System.Text;
 
 namespace SurveyMVC.Controllers
 {
+    [Authorize]
     public class AnswerController : Controller
     {
         private readonly IHttpClientFactory _client;
@@ -14,21 +16,27 @@ namespace SurveyMVC.Controllers
         {
             _client = client;
         }
+        [HttpGet]
         public async Task<IActionResult> Answers()
         {
-            var client=_client.CreateClient();
-            var responseMessage = await client.GetAsync("https://localhost:7132/api/Answer/ListAnswer");
-            if (responseMessage.IsSuccessStatusCode)
-            {
-                var json = await responseMessage.Content.ReadAsStringAsync();
-                var result = JsonConvert.DeserializeObject<List<AnswerDto>>(json);
-                return View(result);
-            }
-            return View();
+
+                var client = _client.CreateClient();
+                var responseMessage = await client.GetAsync("https://localhost:7132/api/Answer/ListAnswer");
+                if (responseMessage.IsSuccessStatusCode)
+                {
+                    var json = await responseMessage.Content.ReadAsStringAsync();
+                    var result = JsonConvert.DeserializeObject<List<AnswerDto>>(json);
+                    return View(result);
+                }
+                return RedirectToAction("Error403", "Error");
+           
         }
+        [HttpGet]
         public IActionResult AddAnswer()
         {
+
             return View();
+
         }
         [HttpPost]
         public async Task<IActionResult> AddAnswer(AddAnswerDto answer)
@@ -41,7 +49,7 @@ namespace SurveyMVC.Controllers
             {
                 return RedirectToAction("Answers", "Answer");
             }
-            return View();
+            return RedirectToAction("Error403", "Error");
         }
         [HttpGet]
         public async Task<IActionResult> UpdateAnswer(int id)
@@ -56,7 +64,7 @@ namespace SurveyMVC.Controllers
                 return View(value);
 
             }
-            return View();
+            return RedirectToAction("Error403", "Error");
         }
         [HttpPost]
         public async Task<IActionResult> UpdateAnswer(UpdateAnswerDto answer)
@@ -69,7 +77,7 @@ namespace SurveyMVC.Controllers
             {
                 return RedirectToAction("Answers", "Answer");
             }
-            return View();
+            return RedirectToAction("Error403", "Error");
         }
         [HttpGet]
         public async Task<IActionResult> DeleteAnswer(int id)
@@ -80,22 +88,18 @@ namespace SurveyMVC.Controllers
             {
                 return RedirectToAction("Answers", "Answer");
             }
-            return View(responseMessage);
+            return RedirectToAction("Error403", "Error");
         }
         [HttpGet]
         public async Task<IActionResult> RemoveAnswer(int id)
         {
             var client = _client.CreateClient();
-            var responseMessage = await client.DeleteAsync($"https://localhost:7132/api/Answer/RemoveAnswer?id={id}");
+            var responseMessage = await client.GetAsync($"https://localhost:7132/api/Answer/RemoveAnswer?id={id}");
             if (responseMessage.IsSuccessStatusCode)
             {
                 return RedirectToAction("Answers");
             }
-            return View(responseMessage);
+            return RedirectToAction("Error403", "Error");
         }
-
-
-
-
     }
 }

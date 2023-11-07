@@ -18,12 +18,11 @@
 
 </style>
 @model List<HomeDto>
-
 <div class="row">
-    <div class="card col-sm-12">
+    <div class="card cardform col-sm-12">
 
         <div class="card-body">
-            <table class="table">
+            <table class="table" id="myTable">
                 <thead>
                     <tr>
                         <th>#</th>
@@ -40,8 +39,8 @@
                         <tr>
 
                             <td>@count</td>
-                            <td>@item.QuestionId</td>
-                            <td>@item.AnswerId Puan </td>
+                            <td>@item.QuestionItem</td>
+                            <td>@item.AnswerItem </td>
                             <td>@item.RoomNumber</td>
                             <td>@item.Mail</td>
                             <td>@item.CreatedDate</td>
@@ -53,8 +52,10 @@
             </table>
         </div>
         <div class="card-footer">
-            <a href="/Survey/AddQuestion" class="btn btn-primary w-100">Yeni Soru Ekle</a>
+ 
         </div>
     </div>
 </div>
+
+
 

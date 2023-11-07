@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using NuGet.Common;
 using SurveyMVC.Dtos.AnswerDtos;
 using SurveyMVC.Dtos.QuestionDtos;
 using SurveyMVC.Dtos.SurveyDtos;
@@ -8,6 +11,7 @@ using System.Text;
 
 namespace SurveyMVC.Controllers
 {
+    [Authorize]
     public class SurveyExampleController : Controller
     {
         private readonly IHttpClientFactory _client;
@@ -18,7 +22,11 @@ namespace SurveyMVC.Controllers
         }
         public IActionResult Survey()
         {
-            return View();
+            if (HttpContext.Response is not null)
+            {
+                return View();
+            }
+            return RedirectToAction("Error403", "Error");
         }
 
         [HttpGet]
@@ -41,15 +49,15 @@ namespace SurveyMVC.Controllers
             }
             return PartialView();
         }
-
-
         [HttpPost]
         public async Task<IActionResult> Survey([FromBody] SurveyDto surveyDto)
         {
+            var response = surveyDto.Response.Where(item => item != null).ToList();
             var client = _client.CreateClient();
             for (int i = 0; i < surveyDto.Item.Count; i++)
+
             {
-                if (surveyDto.Response.Count!=0)
+                if (surveyDto.Response.Count != 0)
                 {
                     var result = new ResultDto
                     {
@@ -57,7 +65,7 @@ namespace SurveyMVC.Controllers
                         ResponseDate = surveyDto.ResponseDate,
                         RoomNumber = surveyDto.RoomNumber,
                         Item = surveyDto.Item[i],
-                        Response = surveyDto.Response[i + 1],
+                        Response = response[i],
                     };
 
                     var json = JsonConvert.SerializeObject(result);
@@ -80,8 +88,8 @@ namespace SurveyMVC.Controllers
                     var responseMessage = await client.PostAsync("https://localhost:7132/api/Result/AddResult", content);
                 }
             }
-            return View();
-        }
+            return RedirectToAction("Error403", "Error");
 
+        }
     }
 }
